@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hyuto/pywebview-react-flask.git"
+    "url": "git+https://github.com/Hyuto/webview-object-detection-app.git"
   },
   "keywords": [
     "pywebview",
@@ -43,9 +43,9 @@
   "author": "Wahyu Setianto",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Hyuto/pywebview-react-flask/issues"
+    "url": "https://github.com/Hyuto/webview-object-detection-app/issues"
   },
-  "homepage": "https://github.com/Hyuto/pywebview-react-flask#readme",
+  "homepage": "https://github.com/Hyuto/webview-object-detection-app#readme",
   "devDependencies": {
     "@nabla/vite-plugin-eslint": "^1.4.0",
     "@vitejs/plugin-react": "^1.2.0",
