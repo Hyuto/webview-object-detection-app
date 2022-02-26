@@ -1,0 +1,63 @@
+{
+  "name": "webview-object-detection-app",
+  "description": "A simple boilerplate to start application with pywebview, React and Flask",
+  "version": "1.0.0",
+  "source": "./public/index.html",
+  "scripts": {
+    "init": "yarn && run-script-os",
+    "init:win32": "py -m venv webview-env && .\\webview-env\\Scripts\\python -m pip install -r requirements.txt",
+    "init:linux": "python3 -m venv webview-env && if [[ -z \"${KDE_FULL_SESSION}\" ]]; then yarn init:qt; else yarn init:gtk; fi",
+    "init:qt": "./webview-env/bin/python -m pip install pyqt5 pyqtwebengine -r requirements.txt",
+    "init:gtk": "sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0 python3-gi python3-gi-cairo gir1.2-webkit2-4.0 && ./webview-env/bin/python -m pip install pycairo PyGObject -r requirements.txt",
+    "clean": "shx rm -rf __pycache__ src/**/__pycache__ .parcel-cache dist",
+    "deepclean": "shx rm -rf __pycache__ src/**/__pycache__ .parcel-cache build dist publish",
+    "python-lint": "run-script-os",
+    "python-lint:win32": ".\\webview-env\\Scripts\\flake8 src",
+    "python-lint:linux": "./webview-env/bin/flake8 src",
+    "build": "yarn clean && yarn react-build && run-script-os",
+    "build:win32": ".\\webview-env\\Scripts\\pyinstaller windows.spec",
+    "build:linux": "./webview-env/bin/pyinstaller linux.spec",
+    "react-dev": "vite build --watch",
+    "react-build": "vite build",
+    "react-serve": "vite serve",
+    "react-lint": "eslint \"src/frontend/**/*.{js,jsx}\"",
+    "install-dep": "run-script-os",
+    "install-dep:win32": ".\\webview-env\\Scripts\\python -m pip install",
+    "install-dep:linux": "./webview-env/bin/python -m pip install",
+    "start": "yarn clean && concurrently --kill-others -n VITE,APP -c bgGreen.bold,bgBlue.bold \"yarn react-dev\" \"yarn serve\"",
+    "serve": "run-script-os",
+    "serve:win32": ".\\webview-env\\Scripts\\python -X dev .\\src\\main.py",
+    "serve:linux": "./webview-env/bin/python -X dev ./src/main.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hyuto/pywebview-react-flask.git"
+  },
+  "keywords": [
+    "pywebview",
+    "react",
+    "flask",
+    "python",
+    "javascript"
+  ],
+  "author": "Wahyu Setianto",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Hyuto/pywebview-react-flask/issues"
+  },
+  "homepage": "https://github.com/Hyuto/pywebview-react-flask#readme",
+  "devDependencies": {
+    "@nabla/vite-plugin-eslint": "^1.4.0",
+    "@vitejs/plugin-react": "^1.2.0",
+    "concurrently": "^7.0.0",
+    "eslint": "^8.9.0",
+    "eslint-plugin-react": "^7.28.0",
+    "run-script-os": "^1.1.6",
+    "shx": "^0.3.4",
+    "vite": "^2.8.4"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
