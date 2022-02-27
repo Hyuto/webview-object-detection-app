@@ -2,6 +2,7 @@ import os
 import json
 import numpy as np
 import cv2
+import onnxruntime
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "model", "yolov5s.onnx")
 LABEL_DIR = os.path.join(os.path.dirname(__file__), "..", "model", "labels.json")
@@ -10,15 +11,6 @@ INPUT_HEIGHT = 640
 SCORE_THRESHOLD = 0.2
 NMS_THRESHOLD = 0.4
 CONFIDENCE_THRESHOLD = 0.4
-
-
-def is_cuda_cv():
-    try:
-        if cv2.cuda.getCudaEnabledDeviceCount() > 0:
-            return 1
-        return 0
-    except Exception:
-        return 0
 
 
 def format_yolov5(frame):
@@ -79,28 +71,17 @@ def wrap_detection(input_image, output_data):
 
 class YOLOv5Model:
     def __init__(self):
-        net = cv2.dnn.readNet(MODEL_DIR)
-        if is_cuda_cv():
-            print("OpenCV attempt to use CUDA")
-            net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-            net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA_FP16)
-        else:
-            print("OpenCV running on CPU")
-            net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
-            net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
-
+        self.net = onnxruntime.InferenceSession(MODEL_DIR, providers=["CPUExecutionProvider"])
         with open(LABEL_DIR) as reader:
             self.labels = json.load(reader)
-        reader.close()
-
-        self.net = net
 
     def detect(self, image):
         blob = cv2.dnn.blobFromImage(
             image, 1 / 255.0, (INPUT_WIDTH, INPUT_HEIGHT), swapRB=True, crop=False
         )
-        self.net.setInput(blob)
-        preds = self.net.forward()
+        preds = self.net.run(
+            [self.net.get_outputs()[0].name], {self.net.get_inputs()[0].name: blob}
+        )[0]
         return preds
 
     def do_detection(self, frame):

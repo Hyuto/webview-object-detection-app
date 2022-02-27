@@ -6,4 +6,3 @@ webview-env/
 
 node_modules/
 .parcel-cache/
-src/model/
