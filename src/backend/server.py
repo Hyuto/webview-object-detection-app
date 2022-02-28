@@ -5,6 +5,7 @@ from functools import wraps
 import webview
 from flask import Flask, render_template, jsonify, request, Response
 from .camera import CameraStream
+from .profiler import Profiler
 
 # Template directory
 if sys.flags.dev_mode:
@@ -21,6 +22,8 @@ def wait_template():
 server = Flask(__name__, template_folder=MAIN_DIR, static_folder=MAIN_DIR, static_url_path="/")
 server.config["SEND_FILE_MAX_AGE_DEFAULT"] = 1
 camera = CameraStream()
+profile = Profiler()
+profile.run()  # Start profiler
 
 
 def verify_token(function):

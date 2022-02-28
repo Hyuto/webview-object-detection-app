@@ -45,8 +45,8 @@ class Watcher:
 
 
 def run_frontend_watcher(template_dir):
-    watcher = Watcher(template_dir)
+    watcher_template = Watcher(template_dir)
 
-    background_thread = threading.Thread(target=watcher.run, args=())
-    background_thread.daemon = True
-    background_thread.start()
+    template_thread = threading.Thread(target=watcher_template.run)
+    template_thread.daemon = True
+    template_thread.start()

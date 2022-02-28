@@ -1,0 +1,23 @@
+.App {
+  padding: 0 10px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+
+  img {
+    margin: 10px 0;
+    width: 100%;
+    max-width: 640px;
+  }
+
+  button {
+    padding: 5px;
+    color: white;
+    background-color: black;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+}

@@ -21,7 +21,7 @@ class CameraStream:
             try:
                 # Release cam
                 self.camera.release()
-                del self.camera  # clear pointer
+                del self.camera  # Clear pointer
 
                 # Set cam to none
                 self.camera = None
