@@ -11,7 +11,7 @@ from .profiler import Profiler
 if sys.flags.dev_mode:
     MAIN_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "dist")  # development
 else:
-    MAIN_DIR = os.path.join(os.path.dirname(__file__), "..", "dist")  # production
+    MAIN_DIR = os.path.join(os.getcwd(), "dist")  # production
 
 
 def wait_template():

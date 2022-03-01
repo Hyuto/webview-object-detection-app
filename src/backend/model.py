@@ -1,11 +1,17 @@
 import os
+import sys
 import json
 import numpy as np
 import cv2
 import onnxruntime
 
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "model", "yolov5s.onnx")
-LABEL_DIR = os.path.join(os.path.dirname(__file__), "..", "model", "labels.json")
+if sys.flags.dev_mode:
+    MAIN_DIR = os.path.join(os.path.dirname(__file__), "..")  # development
+else:
+    MAIN_DIR = os.getcwd()
+
+MODEL_DIR = os.path.join(MAIN_DIR, "model", "yolov5s.onnx")
+LABEL_DIR = os.path.join(MAIN_DIR, "model", "labels.json")
 INPUT_WIDTH = 640
 INPUT_HEIGHT = 640
 
