@@ -1488,6 +1488,11 @@ react-dom@^17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
+react-fetch-streams@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-fetch-streams/-/react-fetch-streams-1.1.2.tgz#a93dee4c69b1c5762311570b9fd2a5cc783f296c"
+  integrity sha512-hSs3VnklUjhicsiBWHJRtYIYu/nCm+zihkMbAJYGZBvWTXhjFzKk5ieuJNtuoszoXUjA7G7ISLwJz+IWETcVQQ==
+
 react-is@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"

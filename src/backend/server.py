@@ -3,7 +3,7 @@ import sys
 import time
 from functools import wraps
 import webview
-from flask import Flask, render_template, jsonify, request, Response
+from flask import Flask, render_template, jsonify, request, stream_with_context
 from .camera import CameraStream
 from .profiler import Profiler
 
@@ -23,7 +23,6 @@ server = Flask(__name__, template_folder=MAIN_DIR, static_folder=MAIN_DIR, stati
 server.config["SEND_FILE_MAX_AGE_DEFAULT"] = 1
 camera = CameraStream()
 profile = Profiler()
-profile.run()  # Start profiler
 
 
 def verify_token(function):
@@ -67,7 +66,9 @@ def open_camera():
 
 @server.route("/video-stream")
 def video_stream():
-    return Response(camera.gen_frames(), mimetype="multipart/x-mixed-replace; boundary=frame")
+    return server.response_class(
+        camera.gen_frames(), mimetype="multipart/x-mixed-replace; boundary=frame"
+    )
 
 
 @server.route("/close", methods=["POST"])
@@ -75,3 +76,8 @@ def video_stream():
 def close_camera():
     status = camera.close()
     return jsonify(status)
+
+
+@server.route("/cpu-stream")
+def cpu_stream():
+    return server.response_class(stream_with_context((profile.get_cpu_memory_usage())))

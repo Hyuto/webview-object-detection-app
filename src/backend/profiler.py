@@ -1,5 +1,5 @@
 import os
-import threading
+import json
 import psutil
 
 
@@ -18,7 +18,4 @@ class Profiler:
             self.cpu.append(cpu_usage)
             self.memory.append(memory_usage)
 
-    def run(self):
-        cpu_thread = threading.Thread(target=self.get_cpu_memory_usage)
-        cpu_thread.daemon = True
-        cpu_thread.start()
+            yield json.dumps({"cpu": cpu_usage, "memory": memory_usage})

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Profile from "./components/profile";
 import "./App.scss";
 
 const App = () => {
@@ -39,6 +40,8 @@ const App = () => {
               console.log(response.message)
           });
       }}>{camera === "open" ? "close" : "open"} camera</button>
+
+      <Profile />
     </div>
   );
 };
