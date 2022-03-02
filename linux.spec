@@ -24,7 +24,7 @@ exe = EXE(pyz,
           name='webview-object-detection-app',
           debug=False,
           strip=True,
-          icon='./src/static/favicon.ico',
+          icon='./public/favicon.ico',
           upx=True,
           console=False)
 

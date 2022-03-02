@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import json
 from functools import wraps
 import webview
 from flask import Flask, render_template, jsonify, request, stream_with_context
@@ -80,4 +81,12 @@ def close_camera():
 
 @server.route("/cpu-stream")
 def cpu_stream():
-    return server.response_class(stream_with_context((profile.get_cpu_memory_usage())))
+    def generator():
+        while True:
+            data = profile.get_cpu_memory_usage()
+            data["fps"] = (
+                camera.fps[-1] if len(camera.fps) != 0 and camera.camera is not None else None
+            )
+            yield json.dumps(data)
+
+    return server.response_class(stream_with_context(generator()))

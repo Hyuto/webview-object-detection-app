@@ -8,7 +8,7 @@ DEBUG = True
 
 def webview_app():
     server.debug = DEBUG
-    webview.create_window("webview-object-detection-app", server)
+    webview.create_window("webview-object-detection-app", server, min_size=(617, 650))
     webview.start(debug=DEBUG)
 
     if camera.camera is not None:

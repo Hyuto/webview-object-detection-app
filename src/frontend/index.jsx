@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.scss";
+import "@fontsource/montserrat";
+import "@fontsource/merriweather";
+import "./style/normalize.css";
+import "./style/style.css";
 import App from "./App";
 
 ReactDOM.render(

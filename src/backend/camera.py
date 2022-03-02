@@ -1,9 +1,11 @@
 import cv2
+from time import time
 from .model import YOLOv5Model
 
 
 class CameraStream:
     camera = None
+    fps = []
     model = YOLOv5Model()
 
     def open(self):
@@ -31,13 +33,21 @@ class CameraStream:
         return {"success": False, "message": "Please open camera first"}
 
     def gen_frames(self):
+        start_time, new_time = 0, 0
+
         while self.camera is not None:
             success, frame = self.camera.read()
 
             if success:
-                frame = self.model.do_detection(frame)
+                frame = self.model.do_detection(frame)  # detecting
                 _, buffer = cv2.imencode(".jpg", frame)
                 frame = buffer.tobytes()
+
+                # count fps
+                new_time = time()
+                self.fps.append(1 / (new_time - start_time))
+                start_time = new_time
+
                 yield b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
             else:
                 break

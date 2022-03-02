@@ -17,14 +17,14 @@
     "build": "yarn clean && yarn react-build && run-script-os",
     "build:win32": ".\\webview-env\\Scripts\\pyinstaller windows.spec",
     "build:linux": "./webview-env/bin/pyinstaller linux.spec",
-    "react-dev": "vite build --watch",
-    "react-build": "vite build",
-    "react-serve": "vite serve",
+    "react-dev": "parcel watch",
+    "react-build": "parcel build --public-url . --no-source-maps",
+    "react-serve": "parcel serve",
     "react-lint": "eslint \"src/frontend/**/*.{js,jsx}\"",
     "install-dep": "run-script-os",
     "install-dep:win32": ".\\webview-env\\Scripts\\python -m pip install",
     "install-dep:linux": "./webview-env/bin/python -m pip install",
-    "start": "yarn clean && concurrently --kill-others -n VITE,APP -c bgGreen.bold,bgBlue.bold \"yarn react-dev\" \"yarn serve\"",
+    "start": "yarn clean && concurrently --kill-others -n PARCEL,APP -c bgGreen.bold,bgBlue.bold \"yarn react-dev\" \"yarn serve\"",
     "serve": "run-script-os",
     "serve:win32": ".\\webview-env\\Scripts\\python -X dev .\\src\\main.py",
     "serve:linux": "./webview-env/bin/python -X dev ./src/main.py"
@@ -47,19 +47,26 @@
   },
   "homepage": "https://github.com/Hyuto/webview-object-detection-app#readme",
   "devDependencies": {
-    "@nabla/vite-plugin-eslint": "^1.4.0",
-    "@vitejs/plugin-react": "^1.2.0",
+    "@parcel/packager-raw-url": "2.3.2",
+    "@parcel/transformer-sass": "2.3.2",
+    "@parcel/transformer-webmanifest": "2.3.2",
     "concurrently": "^7.0.0",
     "eslint": "^8.9.0",
     "eslint-plugin-react": "^7.28.0",
+    "parcel": "^2.3.2",
+    "postcss": "^8.0.0",
+    "postcss-modules": "^4.3.0",
     "run-script-os": "^1.1.6",
     "sass": "^1.49.9",
-    "shx": "^0.3.4",
-    "vite": "^2.8.4"
+    "shx": "^0.3.4"
   },
   "dependencies": {
+    "@fontsource/merriweather": "^4.5.5",
+    "@fontsource/montserrat": "^4.5.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-fetch-streams": "^1.1.2"
+    "react-fetch-streams": "^1.1.2",
+    "react-flexible-sliding-menu": "^0.1.9",
+    "react-icons": "^4.3.1"
   }
 }
