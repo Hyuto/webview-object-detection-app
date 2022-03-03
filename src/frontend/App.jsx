@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
-import Profile from "./components/profile";
-import { FaGithub } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
+// import Profile from "./components/profile";
+import { FaWindowClose, FaGithub } from "react-icons/fa";
 import * as style from "./style/App.module.scss";
 
 const App = () => {
   const { token } = window.SERVER_DATA;
   const [camera, setCamera] = useState(null)
+  const [image, setImage] = useState(null)
+  const imgHandler = useRef(null)
+  const inputImage = useRef(null)
 
   useEffect(() => {
     fetch(`${window.location.origin}/api`, {
@@ -17,9 +20,17 @@ const App = () => {
         throw response;
       })
       .then((response) => {
+        if (response.camera === "open") {
+          imgHandler.current.src = `${window.location.origin}/video-stream`
+          imgHandler.current.style.display = "block"
+        } else if (response.image === "open") {
+          imgHandler.current.src = `${window.location.origin}/image-stream`
+          imgHandler.current.style.display = "block"
+        }
         setCamera(response.camera)
+        setImage(response.image)
       });
-  }, [camera])
+  }, [])
 
   return (
     <div className={style.App}>
@@ -43,25 +54,87 @@ const App = () => {
             <strong>opencv-python</strong>, <strong>onnxruntime</strong>, and <strong>react</strong>
           </p>
         </div>
-        {camera === "open" ? <img src={`${window.location.origin}/video-stream`} /> : null}
+        <div className={style.image}>
+          {image === "open" ?
+            <FaWindowClose size={30} color="black" className={style.close} onClick={async () => {
+              await fetch(`${window.location.origin}/close-image`, {
+                method: "POST",
+                headers: { "Content-type": "application/json", token: token },
+              })
+                .then((response) => {
+                  if (response.ok) return response.json();
+                  throw response;
+                })
+                .then((response) => {
+                  if (response.success) {
+                    imgHandler.current.src = null
+                    imgHandler.current.style.display = "none"
+                    setImage("close")
+                  } else
+                    alert(response.message)
+                })
+            }} /> : null}
+          <img ref={imgHandler} style={{ display: "none" }} />
+        </div>
+        <input type='file' id='file' ref={inputImage} accept="image/*" style={{ display: 'none' }}
+          onChange={(e) => {
+            let file = e.target.files[0];
+            const reader = new FileReader();
+            reader.readAsBinaryString(file);
+            reader.onload = async (e) => {
+              await fetch(`${window.location.origin}/open-image`, {
+                method: "POST",
+                headers: { "Content-type": "application/json", token: token },
+                body: JSON.stringify({ "image": btoa(e.target.result) })
+              })
+                .then((response) => {
+                  if (response.ok) return response.json();
+                  throw response;
+                })
+                .then((response) => {
+                  if (response.success) {
+                    imgHandler.current.src = `${window.location.origin}/image-stream`
+                    imgHandler.current.style.display = "block"
+                    setImage("open")
+                  } else
+                    alert(response.message)
+                });
+            }
+          }} />
 
-        <button onClick={async (e) => {
-          e.preventDefault();
-          await fetch(`${window.location.origin}/${camera === "open" ? "close" : "open"}`, {
-            method: "POST",
-            headers: { "Content-type": "application/json", token: token },
-          })
-            .then((response) => {
-              if (response.ok) return response.json();
-              throw response;
+        <div className="buttons">
+          <button onClick={() => {
+            if (camera !== "open")
+              inputImage.current.click();
+            else
+              alert("Please close camera first!")
+          }}>Open local image</button>
+          <button onClick={async (e) => {
+            e.preventDefault();
+            await fetch(`${window.location.origin}/${camera === "open" ? "close" : "open"}-video-stream`, {
+              method: "POST",
+              headers: { "Content-type": "application/json", token: token },
             })
-            .then((response) => {
-              if (response.success)
-                setCamera(camera === "open" ? "close" : "open")
-              else
-                console.log(response.message)
-            });
-        }}>{camera === "open" ? "close" : "open"} camera</button>
+              .then((response) => {
+                if (response.ok) return response.json();
+                throw response;
+              })
+              .then((response) => {
+                if (response.success) {
+                  const action = camera === "open" ? "close" : "open";
+                  if (action === "open") {
+                    imgHandler.current.src = `${window.location.origin}/video-stream`
+                    imgHandler.current.style.display = "block"
+                  } else {
+                    imgHandler.current.src = null
+                    imgHandler.current.style.display = "none"
+                  }
+                  setCamera(action)
+                } else
+                  alert(response.message)
+              });
+          }}>{camera === "open" ? "Close" : "Open"} camera</button>
+        </div>
 
         {/* 
           To Do: Make slidable menu using "react-flexible-sliding-menu"

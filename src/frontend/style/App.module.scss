@@ -56,11 +56,24 @@
       }
     }
 
-    img {
-      margin: 10px 0;
-      width: 100%;
-      max-width: 640px;
-      border-radius: 10px;
+    .image {
+      margin-bottom: 10px;
+      position: relative;
+
+      .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+      }
+
+      img {
+        margin-top: 2px;
+        width: 100%;
+        max-width: 640px;
+        border-radius: 10px;
+        border: 4px solid black;
+      }
     }
 
     button {

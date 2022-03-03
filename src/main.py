@@ -1,7 +1,7 @@
 import os
 import sys
 import webview
-from backend.server import server, camera
+from backend.server import server, img_handler
 
 DEBUG = True
 
@@ -11,8 +11,8 @@ def webview_app():
     webview.create_window("webview-object-detection-app", server, min_size=(617, 650))
     webview.start(debug=DEBUG)
 
-    if camera.camera is not None:
-        _ = camera.close()
+    if img_handler.camera is not None:
+        _ = img_handler.close_video_stream()
 
 
 if __name__ == "__main__":

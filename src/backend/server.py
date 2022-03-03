@@ -5,7 +5,7 @@ import json
 from functools import wraps
 import webview
 from flask import Flask, render_template, jsonify, request, stream_with_context
-from .camera import CameraStream
+from .camera import ImgHandler
 from .profiler import Profiler
 
 # Template directory
@@ -22,7 +22,7 @@ def wait_template():
 
 server = Flask(__name__, template_folder=MAIN_DIR, static_folder=MAIN_DIR, static_url_path="/")
 server.config["SEND_FILE_MAX_AGE_DEFAULT"] = 1
-camera = CameraStream()
+img_handler = ImgHandler()
 profile = Profiler()
 
 
@@ -55,37 +55,62 @@ def serve(path):
 @server.route("/api")
 @verify_token
 def api():
-    return jsonify({"camera": "close" if camera.camera is None else "open"})
+    return jsonify(
+        {
+            "camera": "close" if img_handler.camera is None else "open",
+            "image": "close" if img_handler.image is None else "open",
+        }
+    )
 
 
-@server.route("/open", methods=["POST"])
+@server.route("/open-video-stream", methods=["POST"])
 @verify_token
 def open_camera():
-    status = camera.open()
+    status = img_handler.open_video_stream()
+    return jsonify(status)
+
+
+@server.route("/close-video-stream", methods=["POST"])
+@verify_token
+def close_camera():
+    status = img_handler.close_video_stream()
     return jsonify(status)
 
 
 @server.route("/video-stream")
 def video_stream():
     return server.response_class(
-        camera.gen_frames(), mimetype="multipart/x-mixed-replace; boundary=frame"
+        img_handler.gen_video_frames(), mimetype="multipart/x-mixed-replace; boundary=frame"
     )
 
 
-@server.route("/close", methods=["POST"])
+@server.route("/open-image", methods=["POST"])
 @verify_token
-def close_camera():
-    status = camera.close()
-    return jsonify(status)
+def open_image():
+    encoded_image = request.json["image"]
+    return jsonify(img_handler.open_local_image(encoded_image))
 
 
-@server.route("/cpu-stream")
+@server.route("/close-image", methods=["POST"])
+@verify_token
+def close_image():
+    return jsonify(img_handler.close_local_image())
+
+
+@server.route("/image-stream")
+def image_stream():
+    return server.response_class(img_handler.gen_image(), mimetype="image/jpeg")
+
+
+@server.route("/cpu-profiler")
 def cpu_stream():
     def generator():
         while True:
             data = profile.get_cpu_memory_usage()
             data["fps"] = (
-                camera.fps[-1] if len(camera.fps) != 0 and camera.camera is not None else None
+                img_handler.fps[-1]
+                if len(img_handler.fps) != 0 and img_handler.camera is not None
+                else None
             )
             yield json.dumps(data)
 

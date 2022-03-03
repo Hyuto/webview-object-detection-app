@@ -7,7 +7,7 @@ const Profile = () => {
         const data = await res.json();
         setData(data);
     }, [setData]);
-    useStream(`${window.location.origin}/cpu-stream`, { onNext });
+    useStream(`${window.location.origin}/cpu-profiler`, { onNext });
 
     return (
         <React.Fragment>
