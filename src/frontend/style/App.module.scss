@@ -1,101 +1,163 @@
 .App {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-rows: 100%;
 
-  .header {
-    margin: 10px 0;
+  .Menu {
+    display: none;
+  }
 
-    .title {
-      width: 100vw;
-      display: flex;
-      flex-direction: row-reverse;
-      justify-content: space-between;
-      align-items: center;
+  .MainWindow {
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-      .home {
-        color: inherit;
-        margin: 0 10px;
-        padding: 10px;
+    .header {
+      margin: 10px 0;
+
+      .title {
+        width: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: row-reverse;
+        justify-content: space-between;
         align-items: center;
-        cursor: pointer;
 
-        &:hover {
+        .home {
+          color: inherit;
+          margin: 0 10px;
+          padding: 10px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+
+          &:hover {
+            background-color: black;
+            color: white;
+            border-radius: 8px;
+          }
+        }
+
+        .opener {
           background-color: black;
-          color: white;
-          border-radius: 8px;
+          padding: 0 8px;
+          border-radius: 0 5px 5px 0;
+          cursor: pointer;
+
+          .icon {
+            padding-top: 5px;
+            color: white;
+          }
+
+          .close {
+            transform: rotateY(180deg);
+          }
         }
       }
     }
-  }
 
-  .main {
-    padding: 0 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    .main {
+      padding: 0 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
 
-    .title {
-      text-align: center;
-      margin: 10px;
+      .title {
+        text-align: center;
+        margin: 0;
 
-      h3 {
-        margin: 5px;
-        padding: 0;
+        h3 {
+          margin: 5px;
+          padding: 0;
+        }
+
+        p {
+          margin: 5px 0;
+          font-size: calc(8px + 0.5vw);
+        }
       }
 
-      p {
-        margin: 5px 0;
-        font-size: small;
+      .image {
+        margin-bottom: 10px;
+        position: relative;
+
+        .close {
+          position: absolute;
+          top: 0;
+          right: 0;
+          cursor: pointer;
+        }
+
+        .LdsDualRing {
+          width: 40px;
+          height: 40px;
+
+          &:after {
+            content: " ";
+            display: block;
+            width: 32px;
+            height: 32px;
+            margin: 4px;
+            border-radius: 50%;
+            border: 3px solid black;
+            border-color: black transparent black transparent;
+            animation: lds-dual-ring 1.2s linear infinite;
+          }
+
+          @keyframes lds-dual-ring {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+        }
+
+        img {
+          margin-top: 2px;
+          width: 100%;
+          max-width: 640px;
+          border-radius: 10px;
+          border: 4px solid black;
+        }
       }
-    }
 
-    .image {
-      margin-bottom: 10px;
-      position: relative;
-
-      .close {
-        position: absolute;
-        top: 0;
-        right: 0;
-        cursor: pointer;
-      }
-
-      img {
-        margin-top: 2px;
-        width: 100%;
-        max-width: 640px;
-        border-radius: 10px;
-        border: 4px solid black;
-      }
-    }
-
-    button {
-      text-decoration: none;
-      color: white;
-      background-color: black;
-      border: 2px solid black;
-      font-weight: 600;
-      margin: 3px 10px;
-      padding: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-
-      &:hover {
-        color: black;
-        background-color: white;
+      button {
+        text-decoration: none;
+        color: white;
+        background-color: black;
         border: 2px solid black;
+        font-weight: 600;
+        margin: 3px 10px;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+          color: black;
+          background-color: white;
+          border: 2px solid black;
+        }
       }
     }
-  }
 
-  .footer {
-    text-align: center;
+    .footer {
+      text-align: center;
+    }
+  }
+}
+
+.GridApp {
+  grid-template-columns: 30% 70%;
+}
+
+@media screen and (min-width: 1000px) {
+  .GridApp {
+    grid-template-columns: 300px auto;
   }
 }
