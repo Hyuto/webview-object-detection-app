@@ -57,10 +57,19 @@ def serve(path):
 def api():
     return jsonify(
         {
+            "model": img_handler.model.model,
             "camera": "close" if img_handler.camera is None else "open",
             "image": "close" if img_handler.image is None else "open",
         }
     )
+
+
+@server.route("/change-model", methods=["POST"])
+@verify_token
+def change_model():
+    new_model = request.json["model"]
+    status = img_handler.model.change_model(new_model)
+    return jsonify(status)
 
 
 @server.route("/open-video-stream", methods=["POST"])

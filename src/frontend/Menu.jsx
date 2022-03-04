@@ -1,23 +1,41 @@
-import React, { useCallback, useState } from 'react';
-import { useStream } from 'react-fetch-streams';
-import * as style from "./style/Menu.module.scss"
+import React from "react";
+import Profiler from "./components/profiler";
+import * as style from "./style/Menu.module.scss";
 
-const Menu = () => {
-    const [data, setData] = useState(null);
-    const onNext = useCallback(async res => {
-        const data = await res.json();
-        setData(data);
-    }, [setData]);
-    useStream(`${window.location.origin}/cpu-profiler`, { onNext });
+const Menu = ({ modelName, setModel, camera }) => {
+  const { token } = window.SERVER_DATA;
 
-    return (
-        <div className={style.Menu}>
-            {data ? <p>{`CPU usage : ${Number.parseFloat(data.cpu).toFixed(2)}%`}<br />
-                {`Memory usage : ${Math.round(Number.parseFloat(data.memory).toFixed(2))}%`}<br />
-                {data.fps ? `FPS : ${Math.round(Number.parseFloat(data.fps).toFixed(2))}` : null}
-            </p> : null}
-        </div>
-    )
-}
+  return (
+    <div className={style.Menu}>
+      <p>
+        Model :{" "}
+        <select
+          onChange={async (e) => {
+            await fetch(`${window.location.origin}/change-model`, {
+              method: "POST",
+              headers: { "Content-type": "application/json", token: token },
+              body: JSON.stringify({ model: e.target.value }),
+            })
+              .then((response) => {
+                if (response.ok) return response.json();
+                throw response;
+              })
+              .then((response) => {
+                if (response.success) setModel(response.model);
+                else alert(response.message);
+              });
+          }}
+          name="models"
+          value={modelName}
+          disabled={camera === "open"}
+        >
+          <option value="yolov5s">yolov5s</option>
+          <option value="yolov5n">yolov5n - lighter</option>
+        </select>
+      </p>
+      <Profiler />
+    </div>
+  );
+};
 
-export default Menu
+export default Menu;

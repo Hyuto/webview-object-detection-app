@@ -66,7 +66,6 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-fetch-streams": "^1.1.2",
-    "react-flexible-sliding-menu": "^0.1.9",
     "react-icons": "^4.3.1"
   }
 }
