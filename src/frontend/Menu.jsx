@@ -11,7 +11,7 @@ const Menu = ({ modelName, setModel, camera }) => {
         Model :{" "}
         <select
           onChange={async (e) => {
-            await fetch(`${window.location.origin}/change-model`, {
+            await fetch(`${window.location.origin}/api/change-model`, {
               method: "POST",
               headers: { "Content-type": "application/json", token: token },
               body: JSON.stringify({ model: e.target.value }),

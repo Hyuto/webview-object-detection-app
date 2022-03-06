@@ -64,7 +64,7 @@ def api():
     )
 
 
-@server.route("/change-model", methods=["POST"])
+@server.route("/api/change-model", methods=["POST"])
 @verify_token
 def change_model():
     new_model = request.json["model"]
@@ -72,46 +72,46 @@ def change_model():
     return jsonify(status)
 
 
-@server.route("/open-video-stream", methods=["POST"])
+@server.route("/api/open-video-stream", methods=["POST"])
 @verify_token
 def open_camera():
     status = img_handler.open_video_stream()
     return jsonify(status)
 
 
-@server.route("/close-video-stream", methods=["POST"])
+@server.route("/api/close-video-stream", methods=["POST"])
 @verify_token
 def close_camera():
     status = img_handler.close_video_stream()
     return jsonify(status)
 
 
-@server.route("/video-stream")
+@server.route("/api/video-stream")
 def video_stream():
     return server.response_class(
         img_handler.gen_video_frames(), mimetype="multipart/x-mixed-replace; boundary=frame"
     )
 
 
-@server.route("/open-image", methods=["POST"])
+@server.route("/api/open-image", methods=["POST"])
 @verify_token
 def open_image():
     encoded_image = request.json["image"]
     return jsonify(img_handler.open_local_image(encoded_image))
 
 
-@server.route("/close-image", methods=["POST"])
+@server.route("/api/close-image", methods=["POST"])
 @verify_token
 def close_image():
     return jsonify(img_handler.close_local_image())
 
 
-@server.route("/image-stream")
+@server.route("/api/image-stream")
 def image_stream():
     return server.response_class(img_handler.gen_image(), mimetype="image/jpeg")
 
 
-@server.route("/cpu-profiler")
+@server.route("/api/cpu-profiler")
 def cpu_stream():
     def generator():
         while True:

@@ -10,7 +10,7 @@ const Profiler = () => {
     },
     [setData]
   );
-  useStream(`${window.location.origin}/cpu-profiler`, { onNext });
+  useStream(`${window.location.origin}/api/cpu-profiler`, { onNext });
 
   return (
     <>
