@@ -1,6 +1,6 @@
 import React from "react";
 
-const LocalImageButton = ({ camera, setImage, inputImage, imgHandler }) => {
+const LocalImageButton = ({ camera, setImage, inputImage }) => {
   const { token } = window.SERVER_DATA;
 
   return (
@@ -12,7 +12,6 @@ const LocalImageButton = ({ camera, setImage, inputImage, imgHandler }) => {
         style={{ display: "none" }}
         onChange={(e) => {
           // Set Loading
-          imgHandler.current.style.display = "none";
           setImage("loading");
 
           // Get image as binary string
@@ -32,9 +31,6 @@ const LocalImageButton = ({ camera, setImage, inputImage, imgHandler }) => {
               })
               .then((response) => {
                 if (response.success) {
-                  // Display image
-                  imgHandler.current.src = `${window.location.origin}/api/image-stream`;
-                  imgHandler.current.style.display = "block";
                   setImage("open");
                 } else {
                   alert(response.message);

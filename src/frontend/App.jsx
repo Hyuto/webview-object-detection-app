@@ -12,7 +12,6 @@ const App = () => {
   const [image, setImage] = useState(null);
   const [model, setModel] = useState("");
   const [menu, setMenu] = useState("close");
-  const imgHandler = useRef(null);
   const inputImage = useRef(null);
 
   useEffect(() => {
@@ -25,13 +24,6 @@ const App = () => {
         throw response;
       })
       .then((response) => {
-        if (response.camera === "open") {
-          imgHandler.current.src = `${window.location.origin}/api/video-stream`;
-          imgHandler.current.style.display = "block";
-        } else if (response.image === "open") {
-          imgHandler.current.src = `${window.location.origin}/api/image-stream`;
-          imgHandler.current.style.display = "block";
-        }
         setCamera(response.camera);
         setImage(response.image);
         setModel(response.model);
@@ -55,20 +47,10 @@ const App = () => {
               <strong>react</strong>
             </p>
           </div>
-          <DynamicImage
-            image={image}
-            setImage={setImage}
-            imgHandler={imgHandler}
-            inputImage={inputImage}
-          />
+          <DynamicImage camera={camera} image={image} setImage={setImage} inputImage={inputImage} />
           <div className="buttons">
-            <LocalImageButton
-              camera={camera}
-              imgHandler={imgHandler}
-              inputImage={inputImage}
-              setImage={setImage}
-            />
-            <VideoButton camera={camera} imgHandler={imgHandler} setCamera={setCamera} />
+            <LocalImageButton camera={camera} inputImage={inputImage} setImage={setImage} />
+            <VideoButton camera={camera} setCamera={setCamera} />
           </div>
         </main>
         <footer className={style.footer}>

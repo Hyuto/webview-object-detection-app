@@ -2,8 +2,12 @@ import React from "react";
 import { FaWindowClose } from "react-icons/fa";
 import * as style from "../style/image.module.scss";
 
-const DynamicImage = ({ image, setImage, imgHandler, inputImage }) => {
+const DynamicImage = ({ camera, image, setImage, inputImage }) => {
   const { token } = window.SERVER_DATA;
+  const urls = {
+    video: `${window.location.origin}/api/video-stream`,
+    image: `${window.location.origin}/api/image-stream`,
+  };
 
   return (
     <div className={style.image}>
@@ -23,8 +27,6 @@ const DynamicImage = ({ image, setImage, imgHandler, inputImage }) => {
               })
               .then((response) => {
                 if (response.success) {
-                  imgHandler.current.src = null;
-                  imgHandler.current.style.display = "none";
                   inputImage.current.value = "";
                   setImage("close");
                 } else alert(response.message);
@@ -36,7 +38,11 @@ const DynamicImage = ({ image, setImage, imgHandler, inputImage }) => {
         className={style.LdsDualRing}
         style={{ display: image === "loading" ? "inline-block" : "none" }}
       ></div>
-      <img ref={imgHandler} style={{ display: "none" }} />
+      {camera === "open" ? (
+        <img src={urls.video} />
+      ) : image === "open" ? (
+        <img src={urls.image} />
+      ) : null}
     </div>
   );
 };

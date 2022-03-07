@@ -1,6 +1,6 @@
 import React from "react";
 
-const VideoButton = ({ camera, setCamera, imgHandler }) => {
+const VideoButton = ({ camera, setCamera }) => {
   const { token } = window.SERVER_DATA;
 
   return (
@@ -21,13 +21,6 @@ const VideoButton = ({ camera, setCamera, imgHandler }) => {
             .then((response) => {
               if (response.success) {
                 const action = camera === "open" ? "close" : "open";
-                if (action === "open") {
-                  imgHandler.current.src = `${window.location.origin}/api/video-stream`;
-                  imgHandler.current.style.display = "block";
-                } else {
-                  imgHandler.current.src = null;
-                  imgHandler.current.style.display = "none";
-                }
                 setCamera(action);
               } else alert(response.message);
             });
