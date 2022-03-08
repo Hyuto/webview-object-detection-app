@@ -6,12 +6,15 @@ from .model import YOLOv5Model
 
 
 class ImgHandler:
+    """Image tag handler"""
+
     camera = None
     image = None
     fps = []
     model = YOLOv5Model()
 
     def open_video_stream(self):
+        """Open webcam stream"""
         if self.camera is None and self.image is None:
             try:
                 self.camera = cv2.VideoCapture(0)
@@ -24,6 +27,7 @@ class ImgHandler:
         return {"success": False, "message": "Camera is already opened"}
 
     def close_video_stream(self):
+        """Close webcam stream"""
         if self.camera is not None:
             try:
                 # Release cam
@@ -38,6 +42,7 @@ class ImgHandler:
         return {"success": False, "message": "Please open camera first!"}
 
     def gen_video_frames(self):
+        """Webcam frame generator"""
         start_time, new_time = 0, 0
 
         while self.camera is not None:
@@ -58,6 +63,7 @@ class ImgHandler:
                 break
 
     def open_local_image(self, encoded_image):
+        """Open local image"""
         if self.camera is None:
             try:
                 np_arr = np.frombuffer(base64.b64decode(encoded_image), np.uint8)
@@ -69,11 +75,13 @@ class ImgHandler:
         return {"success": False, "message": "Please close camera stream first!"}
 
     def close_local_image(self):
+        """Close local image"""
         if self.image is not None:
             self.image = None
             return {"success": True}
         return {"success": False, "message": "No image to close!"}
 
     def gen_image(self):
+        """Local image generator"""
         _, buffer = cv2.imencode(".jpg", self.image)
         return buffer.tobytes()

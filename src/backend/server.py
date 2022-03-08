@@ -1,6 +1,5 @@
 import os
 import sys
-import time
 import json
 from functools import wraps
 import webview
@@ -15,15 +14,10 @@ else:
     MAIN_DIR = os.path.join(os.getcwd(), "dist")  # production
 
 
-def wait_template():
-    while not os.path.exists(os.path.join(MAIN_DIR, "index.html")) and sys.flags.dev_mode:
-        time.sleep(0.5)
-
-
 server = Flask(__name__, template_folder=MAIN_DIR, static_folder=MAIN_DIR, static_url_path="/")
 server.config["SEND_FILE_MAX_AGE_DEFAULT"] = 1
 img_handler = ImgHandler()
-profile = Profiler()
+profile = Profiler(pid=os.getpid())
 
 
 def verify_token(function):
@@ -46,9 +40,6 @@ def add_header(response):
 @server.route("/", defaults={"path": ""})
 @server.route("/<path:path>")
 def serve(path):
-    # Handle first launch on development stage
-    wait_template()
-
     return render_template("index.html", token=webview.token)
 
 
@@ -58,6 +49,8 @@ def api():
     return jsonify(
         {
             "model": img_handler.model.model,
+            "labels": img_handler.model.labels,
+            "find": img_handler.model.find,
             "camera": "close" if img_handler.camera is None else "open",
             "image": "close" if img_handler.image is None else "open",
         }
@@ -69,6 +62,14 @@ def api():
 def change_model():
     new_model = request.json["model"]
     status = img_handler.model.change_model(new_model)
+    return jsonify(status)
+
+
+@server.route("/api/change-find", methods=["POST"])
+@verify_token
+def change_find():
+    new_find = request.json["find"]
+    status = img_handler.model.change_find(new_find)
     return jsonify(status)
 
 

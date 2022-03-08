@@ -11,6 +11,8 @@ const App = () => {
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
   const [model, setModel] = useState("");
+  const [find, setFind] = useState("");
+  const [labels, setLabels] = useState([]);
   const [menu, setMenu] = useState("close");
   const inputImage = useRef(null);
 
@@ -27,13 +29,22 @@ const App = () => {
         setCamera(response.camera);
         setImage(response.image);
         setModel(response.model);
+        setFind(response.find);
+        setLabels(["all", ...response.labels.sort()]);
       });
   }, []);
 
   return (
     <div className={`${style.App} ${menu === "open" ? style.GridApp : null}`}>
       <div className={style.Menu} style={{ display: menu === "open" ? "block" : "none" }}>
-        <Menu modelName={model} setModel={setModel} camera={camera} />
+        <Menu
+          modelName={model}
+          setModel={setModel}
+          camera={camera}
+          find={find}
+          setFind={setFind}
+          labels={labels}
+        />
       </div>
       <div className={style.MainWindow}>
         <Header menu={menu} setMenu={setMenu} />

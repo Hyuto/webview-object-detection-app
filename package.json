@@ -7,7 +7,7 @@
     "init": "yarn && run-script-os",
     "init:win32": "py -m venv webview-env && .\\webview-env\\Scripts\\python -m pip install -r requirements.txt",
     "init:linux": "python3 -m venv webview-env && sudo apt install python3-pyqt5 && yarn init:qt",
-    "init:qt": "./webview-env/bin/python -m pip install pywebview[qt] -r requirements.txt",
+    "init:qt": "./webview-env/bin/python -m pip install -r requirements.txt",
     "clean": "shx rm -rf src/__pycache__ src/**/__pycache__ .parcel-cache dist",
     "deepclean": "yarn clean build publish",
     "python-lint": "run-script-os",

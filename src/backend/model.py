@@ -16,6 +16,7 @@ class YOLOv5Model:
     input_width = 640
     input_height = 640
     model = "yolov5n"
+    find = "all"
 
     def __init__(self):
         self.net = onnxruntime.InferenceSession(
@@ -25,14 +26,18 @@ class YOLOv5Model:
             self.labels = json.load(reader)
 
     def change_model(self, new_model):
-        if new_model != self.model:
-            self.model = new_model
-            self.net = onnxruntime.InferenceSession(
-                os.path.join(self.models_dir, f"{new_model}.onnx"),
-                providers=["CPUExecutionProvider"],
-            )
-            return {"success": True, "model": self.model}
-        return {"success": False, "message": "Model is already used!"}
+        self.model = new_model
+        self.net = onnxruntime.InferenceSession(
+            os.path.join(self.models_dir, f"{new_model}.onnx"),
+            providers=["CPUExecutionProvider"],
+        )
+        return {"success": True, "model": self.model}
+
+    def change_find(self, new_find):
+        if new_find in self.labels + ["all"]:
+            self.find = new_find
+            return {"success": True, "find": self.find}
+        return {"success": False, "message": "Unknown find label"}
 
     def format(self, frame):
         row, col, _ = frame.shape
@@ -78,6 +83,8 @@ class YOLOv5Model:
         indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.25, 0.45)
         result_class_ids, result_confidences, result_boxes = [], [], []
         for i in indexes:
+            if self.find != "all" and self.labels[class_ids[i]] != self.find:
+                continue
             result_confidences.append(confidences[i])
             result_class_ids.append(class_ids[i])
             result_boxes.append(boxes[i])

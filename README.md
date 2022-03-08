@@ -11,10 +11,10 @@ Webview object detection application.
 
 **Supported Platforms**
 
-| Platforms              |       Tested       |
-| :--------------------- | :----------------: |
-| Windows                | :white_check_mark: |
-| Linux [`Debian` based] | :white_check_mark: |
+| Platforms              |       Tested       |       Web Engine       |
+| :--------------------- | :----------------: | :--------------------: |
+| Windows                | :white_check_mark: | Webview2 Edge Chromium |
+| Linux [`Debian` based] | :white_check_mark: |           Qt           |
 
 ## Setup
 

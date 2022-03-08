@@ -1,11 +1,12 @@
-import os
 import psutil
 
 
 class Profiler:
-    pid = os.getpid()
     cpu = []
     memory = []
+
+    def __init__(self, pid):
+        self.pid = pid
 
     def get_cpu_memory_usage(self):
         currentProcess = psutil.Process(self.pid)

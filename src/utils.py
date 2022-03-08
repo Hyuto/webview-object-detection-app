@@ -26,13 +26,7 @@ class Watcher:
         self.observer = Observer()
         self.directory_to_watch = template_dir
 
-    def _wait_first_launch(self):
-        while not os.path.exists(self.directory_to_watch):
-            time.sleep(0.5)
-
     def run(self):
-        self._wait_first_launch()
-
         event_handler = Handler()
         self.observer.schedule(event_handler, self.directory_to_watch, recursive=True)
         self.observer.start()
@@ -50,3 +44,8 @@ def run_frontend_watcher(template_dir):
     template_thread = threading.Thread(target=watcher_template.run)
     template_thread.daemon = True
     template_thread.start()
+
+
+def wait_template(path):
+    while not os.path.exists(os.path.join(path, "index.html")):
+        time.sleep(0.5)
