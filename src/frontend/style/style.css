@@ -332,15 +332,15 @@ a:focus {
   }
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 15px;
 }
 
-body::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background: ghostwhite;
 }
 
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   height: 10%;
   background-color: black;
   border-radius: 20px;
@@ -371,4 +371,29 @@ body::-webkit-scrollbar-thumb {
 
 .tags-button:hover {
   text-decoration: underline;
+}
+
+#multiselectContainerReact {
+  margin-bottom: 10px;
+  font-size: calc(8px + 0.5vw);
+}
+
+#multiselectContainerReact .search-wrapper {
+  background-color: white;
+}
+
+#multiselectContainerReact > .singleSelect {
+  padding: 0;
+}
+
+#multiselectContainerReact .singleChip {
+  margin: 3px 0;
+}
+
+#multiselectContainerReact .highlight {
+  background-color: black;
+}
+
+#multiselectContainerReact .option:hover {
+  background-color: black;
 }

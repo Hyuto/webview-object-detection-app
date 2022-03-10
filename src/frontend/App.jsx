@@ -10,8 +10,8 @@ const App = () => {
   const { token } = window.SERVER_DATA;
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
-  const [model, setModel] = useState("");
-  const [find, setFind] = useState("");
+  const [model, setModel] = useState([]);
+  const [find, setFind] = useState([]);
   const [labels, setLabels] = useState([]);
   const [menu, setMenu] = useState("close");
   const inputImage = useRef(null);
@@ -30,7 +30,7 @@ const App = () => {
         setImage(response.image);
         setModel(response.model);
         setFind(response.find);
-        setLabels(["all", ...response.labels.sort()]);
+        setLabels(response.labels);
       });
   }, []);
 
@@ -38,7 +38,7 @@ const App = () => {
     <div className={`${style.App} ${menu === "open" ? style.GridApp : null}`}>
       <div className={style.Menu} style={{ display: menu === "open" ? "block" : "none" }}>
         <Menu
-          modelName={model}
+          model={model}
           setModel={setModel}
           camera={camera}
           find={find}

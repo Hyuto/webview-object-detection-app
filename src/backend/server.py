@@ -48,9 +48,14 @@ def serve(path):
 def api():
     return jsonify(
         {
-            "model": img_handler.model.model,
-            "labels": img_handler.model.labels,
-            "find": img_handler.model.find,
+            "model": [
+                {
+                    "value": img_handler.model.model,
+                    "label": img_handler.model.model,
+                }
+            ],
+            "labels": [{"value": x, "label": x.capitalize()} for x in img_handler.model.labels],
+            "find": [{"value": x, "label": x.capitalize()} for x in img_handler.model.find],
             "camera": "close" if img_handler.camera is None else "open",
             "image": "close" if img_handler.image is None else "open",
         }
