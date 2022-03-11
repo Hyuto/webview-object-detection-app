@@ -1,4 +1,5 @@
 import React from "react";
+import Loading from "./loading";
 import { FaWindowClose } from "react-icons/fa";
 import * as style from "../style/image.module.scss";
 
@@ -34,10 +35,7 @@ const DynamicImage = ({ camera, image, setImage, inputImage }) => {
           }}
         />
       ) : null}
-      <div
-        className={style.LdsDualRing}
-        style={{ display: image === "loading" ? "inline-block" : "none" }}
-      ></div>
+      <Loading isLoading={image === "loading"} />
       {camera === "open" ? (
         <img src={urls.video} />
       ) : image === "open" ? (
